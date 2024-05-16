@@ -27,12 +27,12 @@ jobs:
       - run: cargo build --release
       - uses: actions/upload-artifact@v4
         with:
-          name: groovy-language-server-wrapper-${{ runner.os }}
+          name: groovy-language-server-${{ runner.os }}
           path: target/release/groovy_language_server_wrapper
         if: matrix.os != 'windows-latest'
       - uses: actions/upload-artifact@v4
         with:
-          name: groovy-language-server-wrapper-${{ runner.os }}
+          name: groovy-language-server-${{ runner.os }}
           path: target/release/groovy_language_server_wrapper.exe
         if: matrix.os == 'windows-latest'
   release:
