@@ -50,9 +50,6 @@ jobs:
           cp \
             groovy-language-server-all/groovy-language-server-all.jar \
             groovy-language-server-macOS/groovy-language-server-all.jar
-          zip groovy-language-server-Linux groovy-language-server-Linux
-          zip groovy-language-server-Windows groovy-language-server-Windows
-          zip groovy-language-server-macOS groovy-language-server-macOS
       - id: shorten-sha
         run: |
           sha=$(echo ${{ github.sha }} | cut -c1-7)
@@ -60,7 +57,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            groovy-language-server-Linux.zip
-            groovy-language-server-Windows.zip
-            groovy-language-server-macOS.zip
+            groovy-language-server-Linux
+            groovy-language-server-Windows
+            groovy-language-server-macOS
           tag_name: ${{ steps.shorten-sha.outputs.sha }}
