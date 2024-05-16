@@ -6,14 +6,43 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v2
         with:
           distribution: "temurin"
           java-version: 8
+        if: ${{ matrix.os == "ubuntu-latest" }}
       - run: ./gradlew build
+        if: ${{ matrix.os == "ubuntu-latest" }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: groovy-language-server-all
+          path: build/libs/groovy-language-server-all.jar
+        if: ${{ matrix.os == "ubuntu-latest" }}
+      - run: cargo build --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: groovy-language-server-wrapper-${{ runner.os }}
+          path: target/release/groovy_language_server_wrapper*
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+      - run: |
+          cp \
+            groovy-language-server-all/groovy-language-server-all.jar \
+            groovy-language-server-Linux
+          cp \
+            groovy-language-server-all/groovy-language-server-all.jar \
+            groovy-language-server-Windows
+          cp \
+            groovy-language-server-all/groovy-language-server-all.jar \
+            groovy-language-server-macOS
       - id: shorten-sha
         run: |
           sha=$(echo ${{ github.sha }} | cut -c1-7)
@@ -21,5 +50,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/libs/groovy-language-server-all.jar
+            groovy-language-server-Linux
+            groovy-language-server-Windows
+            groovy-language-server-macOS
           tag_name: ${{ steps.shorten-sha.outputs.sha }}
