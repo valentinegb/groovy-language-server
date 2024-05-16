@@ -14,8 +14,12 @@ jobs:
           distribution: "temurin"
           java-version: 8
       - run: ./gradlew build
+      - id: shorten-sha
+        run: |
+          sha=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "sha=$sha" >> $GITHUB_OUTPUT
       - uses: softprops/action-gh-release@v2
         with:
           files: |
             build/libs/groovy-language-server-all.jar
-          tag_name: ${{ github.sha }}
+          tag_name: ${{ steps.shorten-sha.outputs.sha }}
