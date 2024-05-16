@@ -16,14 +16,14 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 8
-        if: matrix.os == "ubuntu-latest"
+        if: matrix.os == ubuntu-latest
       - run: ./gradlew build
-        if: matrix.os == "ubuntu-latest"
+        if: matrix.os == ubuntu-latest
       - uses: actions/upload-artifact@v4
         with:
           name: groovy-language-server-all
           path: build/libs/groovy-language-server-all.jar
-        if: matrix.os == "ubuntu-latest"
+        if: matrix.os == ubuntu-latest
       - run: cargo build --release
       - uses: actions/upload-artifact@v4
         with:
