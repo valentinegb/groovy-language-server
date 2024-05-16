@@ -25,3 +25,6 @@ target/
 
 # Node.js
 node_modules/
+
+# Cargo
+/target
